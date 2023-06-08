@@ -38,6 +38,11 @@ const isActive = (path: string) => {
 };
 
 const tags = useTagsStore();
+
+// 在添加标签页时，保存标签页数据到本地存储
+const saveTagsToLocalStorage = () => {
+	localStorage.setItem('ms_tags', JSON.stringify(tags.list));
+};
 // 关闭单个标签
 const closeTags = (index: number) => {
 	const delItem = tags.list[index];
@@ -54,19 +59,13 @@ const closeTags = (index: number) => {
 
 // 读取本地存储中的标签页数据
 const loadTagsFromLocalStorage = () => {
-	const savedTags = localStorage.getItem('tags');
+	const savedTags = localStorage.getItem('ms_tags');
 	if (savedTags) {
 		tags.list = JSON.parse(savedTags);
-	}
+	}    
 };
-
 // 在组件初始化时加载本地存储中的标签页数据
 loadTagsFromLocalStorage();
-
-// 在添加标签页时，保存标签页数据到本地存储
-const saveTagsToLocalStorage = () => {
-	localStorage.setItem('tags', JSON.stringify(tags.list));
-};
 
 // 设置标签
 const setTags = (route: any) => {
@@ -74,8 +73,6 @@ const setTags = (route: any) => {
 	const isExist = tags.list.some(item => {
 		return item.path === route.fullPath;
 	});
-	console.log("isExist", isExist);
-
 	// some方法：该方法用于检测数组中是否至少有一个元素满足指定的条件
 	if (!isExist) {
 		if (tags.list.length >= 8) tags.delTagsItem(0);
@@ -104,8 +101,7 @@ onBeforeRouteUpdate(to => {
 const closeAll = () => {
 	tags.clearTags();
 	router.push('/');
-	
-
+	saveTagsToLocalStorage();
 };
 // 关闭其他标签
 const closeOther = () => {

@@ -1,5 +1,10 @@
 <template>
     <div class="sidebar">
+      <!-- 
+        1）router:开启路由模式，菜单项的点击触发路由的跳转，配合default-active着使用
+        2）default-active：页面加载时默认激活菜单的 index，返回当前路由的路径
+        3）unique-opened：设置菜单的子菜单是否同时只能展开一个。
+      -->
       <el-menu
           class="sidebar-el-menu"
           :default-active="onRoutes"
@@ -152,6 +157,7 @@ const items = [
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
+//通过computed计算属性返回当前路由的路径
 const onRoutes = computed(() => {
   return route.path;
 });
